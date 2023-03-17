@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Post Lookup</title>
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+		th, td {
+			text-align: left;
+			padding: 8px;
+			border-bottom: 1px solid #ddd;
+		}
+		th {
+			background-color: #4CAF50;
+			color: white;
+		}
+		.error {
+			color: red;
+			font-weight: bold;
+		}
+		button {
+			margin-top: 16px;
+			padding: 8px 16px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Post Lookup</h1>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Post Number</th>
+				<th>Registration Date</th>
+				<th>Title</th>
+				<th>Detail</th>
+			</tr>
+		</thead>
+		<tbody id="postTableBody">
+			<!-- The table data will be populated dynamically using JavaScript -->
+		</tbody>
+	</table>
+
+	<button id="postButton">Post</button>
+
+	<script>
+		// Make a GET request to the API endpoint
+		fetch('http://172.21.113.118:3000/list')
+			.then(response => response.json())
+			.then(data => {
+				// Map the JSON data to table rows
+				const rows = data.map(post => {
+					return `<tr>
+						<td>${post.number}</td>
+						<td>${post.postdtime}</td>
+						<td>${post.title}</td>
+						<td>${post.content}</td>
+					</tr>`;
+				}).join('');
+
+				// Add the table rows to the table body
+				document.getElementById('postTableBody').innerHTML = rows;
+			})
+			.catch(error => {
+				// Display an error message if the API request fails
+				const errorMessage = `<tr><td colspan="4" class="error">Error: ${error.message}</td></tr>`;
+				document.getElementById('postTableBody').innerHTML = errorMessage;
+			});
+
+		// Navigate to board.html when the "Register Post" button is clicked
+		document.getElementById('postButton').addEventListener('click', () => {
+			window.location.href = 'http://172.21.113.118:3000/post.html';
+		});
+	</script>
+
+</body>
+</html>
